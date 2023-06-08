@@ -5,7 +5,8 @@ use std::io;
 fn main() {
     println!("Guess the number! from 1 to 20");
 
-    let secret_number = rand::thread_rng().gen_range(1..=20);
+    let mut numbers_random = rand::thread_rng();
+    let secret_number = numbers_random.gen_range(1..=20);
 
     loop {
         let mut guess = String::new();
@@ -16,16 +17,29 @@ fn main() {
             .expect("failed to read line");
 
         // shadowing
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        // .expect("Please type a number!") ->> Rsult Error Handling (match OK / Err)
 
-        println!("You guessed {guess}");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input. Please enter a number.");
+                continue;
+            }
+        };
+
+        if guess < 1 || guess > 20 {
+            println!("The secret number will be between 1 and 20.");
+            continue;
+        }
+
+        println!("You guessed {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
                 println!("You win!");
-                println!("The secret number is: {secret_number}");
+                println!("The secret number is: {}", secret_number);
                 break;
             }
         }
