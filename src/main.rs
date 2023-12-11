@@ -9,10 +9,13 @@ fn main() {
     let secret_number = numbers_random.gen_range(1..=20);
 
     loop {
+        //String::new() = sebuah string baru dibuat, dan lifetime-nya dimulai. 
         let mut guess = String::new();
+      
 
         // take whatever the user types into standard input and append that into a string (without overwriting its contents),
         io::stdin()
+            // .read_line(&mut guess)
             .read_line(&mut guess)
             .expect("failed to read line");
 
@@ -45,3 +48,4 @@ fn main() {
         }
     }
 }
+
